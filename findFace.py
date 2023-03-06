@@ -1,26 +1,18 @@
-import face_recognition
-import pygame
-import pygame.camera
+# import face_recognition
+import cv2
 
-pygame.init()
-pygame.camera.init()
 
-# make the list of all available cameras
-camlist = pygame.camera.list_cameras()
-print(camlist)
-# if camera is detected or not
-if camlist:
-    # initializing the cam variable with default camera
-    cam = pygame.camera.Camera(camlist[0], (640, 480))
+cam = cv2.VideoCapture(0)
+while True:
+    ret, frame = cam.read()
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+    faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
 
-    # opening the camera
-    cam.start()
-
-    # capturing the single image
-    image = cam.get_image()
-
-    # saving the image
-    pygame.image.save(image, "filename.jpg")
-
-image = face_recognition.load_image_file("filename.jpg")
-face_locations = face_recognition.face_locations(image)
+    for (x, y, w, h) in faces:
+        print(f"{x=} {y=} {w=} {h=}")
+        x_mid = x + w // 2
+        y_mid = y + h // 2
+        cv2.rectangle(frame, (x_mid, y_mid), (x_mid + 1, y_mid + 1), (0, 0, 255), 20)
+    cv2.imshow('Image', frame)
+    cv2.destroyAllWindows()
