@@ -1,0 +1,9 @@
+[tool.poetry]
+name = "my-project"
+version = "0.1.0"
+description = "My project description."
+authors= ["Judah Schwartz"]
+[tool.poetry.dependencies]
+python = "^3.10"
+face-recognition = "*"
+pygame ="*"
